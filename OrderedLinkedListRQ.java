@@ -3,7 +3,7 @@ import java.lang.String;
 
 /**
  * Implementation of the run queue interface using an Ordered Link List.
- *
+ * <p>
  * Your task is to complete the implementation of this class.
  * You may add methods and attributes, but ensure your modified class compiles and runs.
  *
@@ -12,7 +12,6 @@ import java.lang.String;
 public class OrderedLinkedListRQ implements Runqueue {
 
     Proc nodeHead;
-    int listLength;
 
     /**
      * Constructs empty linked list
@@ -32,8 +31,9 @@ public class OrderedLinkedListRQ implements Runqueue {
         Proc previousNode = null;
 
         /**
-         * If list is not empty, find a node that is smaller than vt
-         *
+         * If list is not empty, find first node bigger than vt and assign as current
+         * Set new node as previous node's next node
+         * Set new node's next node as current node
          */
         while (currentNode != null && vt >= currentNode.getVt()) {
             previousNode = currentNode;
@@ -53,17 +53,29 @@ public class OrderedLinkedListRQ implements Runqueue {
 
     @Override
     public String dequeue() {
-        // Implement me
+        // Set node head as removed, and node head as next node
         Proc removed = nodeHead;
         nodeHead = nodeHead.getNextNode();
 
+        // Print label of removed node
         return removed.getProcLabel();
     } // end of dequeue()
 
 
     @Override
     public boolean findProcess(String procLabel) {
-        // Implement me
+
+        Proc currentNode = nodeHead;
+
+        // Iterate through list until node with matching procLabel
+        while (currentNode != null && !currentNode.getProcLabel().equals(procLabel)) {
+            currentNode = currentNode.getNextNode();
+        }
+
+        // If node is not null and equal to procLabel return true
+        if (currentNode != null && currentNode.getProcLabel().equals(procLabel)) {
+            return true;
+        }
 
         return false; // placeholder, modify this
     } // end of findProcess()
@@ -75,7 +87,7 @@ public class OrderedLinkedListRQ implements Runqueue {
         Proc currentNode = nodeHead;
         Proc previousNode = null;
 
-        while (currentNode.getProcLabel() != procLabel) {
+        while (!currentNode.getProcLabel().equals(procLabel)) {
             if (currentNode == null) {
                 return false;
             } else {
@@ -115,6 +127,7 @@ public class OrderedLinkedListRQ implements Runqueue {
             list.append(currentNode.getProcLabel() + " ");
             currentNode = currentNode.getNextNode();
         }
+
         System.out.println(list);
 
     } // end of printAllProcess()
