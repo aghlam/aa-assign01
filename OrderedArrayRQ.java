@@ -1,6 +1,8 @@
 import java.io.PrintWriter;
 import java.lang.String;
 
+import com.sun.corba.se.impl.ior.NewObjectKeyTemplateBase;
+
 
 /**
  * Implementation of the Runqueue interface using an Ordered Array.
@@ -37,7 +39,10 @@ public class OrderedArrayRQ implements Runqueue {
     	}
     	else if(back >= cap)
     	{
-    		//TODO: Make a copy of this procArray but with a bigger size
+    		int oldLength = procArray.length;
+    		Proc[] newProcArray = new Proc[oldLength + (oldLength/10)]; //Increase array by 10%
+    		System.arraycopy(procArray, 0, newProcArray, 0, back);
+    		procArray = newProcArray;
     	}
     	else if(findProcess(procLabel) == false)
     	{
@@ -101,7 +106,7 @@ public class OrderedArrayRQ implements Runqueue {
     	//As array is sorted in vt, have to linear search
     	for(int i = 0; i < back; i++)
     	{
-    		if(procArray[i].getProcLabel().contains(procLabel))
+    		if(procArray[i].getProcLabel().equals(procLabel))
     		{
     			return true;
     		}
@@ -119,27 +124,31 @@ public class OrderedArrayRQ implements Runqueue {
     		return false;
     	}
     	
-    	//Again, linear search as sorted in vt
-        for(int i = 0; i < back - 2; i++)
-        {
-        	if(procArray[i].getProcLabel().contains(procLabel))
-        	{
-        		for(int j = i; j < back - 2; j++)
-        		{
-        			procArray[j] = procArray[j + 1];
-        		}
-        		procArray[back - 1] = null;
-        		back--;
-        		return true;
-        	}
-        }
-        //If not within array, check last array, removing that does not require moving of other elements
-        if(procArray[back - 1].getProcLabel().contains(procLabel))
+    	else if(procArray[back - 1].getProcLabel().equals(procLabel))
         {
         	procArray[back - 1] = null;
         	back--;
         	return true;
         }
+    	else
+    	{
+        	//Again, linear search as sorted in vt
+            for(int i = 0; i < back - 2; i++)
+            {
+            	if(procArray[i].getProcLabel().equals(procLabel))
+            	{
+            		for(int j = i; j < back - 1; j++)
+            		{
+            			procArray[j] = procArray[j + 1];
+            		}
+            		procArray[back - 1] = null;
+            		back--;
+            		return true;
+            	}
+            }
+    	}
+
+
         
         //Process label was not found
         return false;
@@ -159,7 +168,7 @@ public class OrderedArrayRQ implements Runqueue {
     		boolean labelInArray = false;
         	for(int i = 0; i < back; i++)
         	{
-        		if(procArray[i].getProcLabel() == procLabel)
+        		if(procArray[i].getProcLabel().equals(procLabel))
         		{
         			labelInArray = true;
         			break;
@@ -190,9 +199,9 @@ public class OrderedArrayRQ implements Runqueue {
     	else
     	{
     		boolean labelInArray = false;
-        	for(int i = back; i >= 0; i--)
+        	for(int i = back - 1; i >= 0; i--)
         	{
-        		if(procArray[i].getProcLabel() == procLabel)
+        		if(procArray[i].getProcLabel().equals(procLabel))
         		{
         			labelInArray = true;
         			break;
