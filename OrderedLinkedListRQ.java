@@ -111,9 +111,27 @@ public class OrderedLinkedListRQ implements Runqueue {
 
     @Override
     public int precedingProcessTime(String procLabel) {
-        // Implement me
 
-        return -1; // placeholder, modify this
+        int processTime = 0;
+        Proc currentNode = nodeHead;
+        Proc previousNode = null;
+
+        // Iterate through list until until procLabel and add up all previous node's vt
+        // EXCEPT for last node's
+        while (!currentNode.getProcLabel().equals(procLabel)) {
+            if (previousNode != null) {
+                processTime += previousNode.getVt();
+            }
+            previousNode = currentNode;
+            currentNode = currentNode.getNextNode();
+        }
+
+        // Add previous node's vt of current node
+        if (previousNode != null) {
+            processTime += previousNode.getVt();
+        }
+
+        return processTime;
     } // end of precedingProcessTime()
 
 
