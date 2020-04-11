@@ -11,21 +11,15 @@ import java.lang.String;
  */
 public class OrderedLinkedListRQ implements Runqueue {
 
-    // To keep track the list size
-    private int listSize;
-    // Keep track if list is empty
-    private boolean isEmpty;
-    //
     Proc nodeHead;
-
+    int listLength;
 
     /**
      * Constructs empty linked list
      */
     public OrderedLinkedListRQ() {
         // Implement me
-        this.listSize = 0;
-        this.nodeHead = null;
+        nodeHead = null;
 
     }  // end of OrderedLinkedList()
 
@@ -37,10 +31,15 @@ public class OrderedLinkedListRQ implements Runqueue {
         Proc currentNode = nodeHead;
         Proc previousNode = null;
 
-        while(currentNode != null && vt > currentNode.getVt()) {
+        /**
+         * If list is not empty, find a node that is smaller than vt
+         *
+         */
+        while (currentNode != null && vt >= currentNode.getVt()) {
             previousNode = currentNode;
             currentNode = currentNode.getNextNode();
         }
+        // If list is empty, set newNode as nodeHead
         if (previousNode == null) {
             nodeHead = newNode;
         } else {
@@ -55,8 +54,10 @@ public class OrderedLinkedListRQ implements Runqueue {
     @Override
     public String dequeue() {
         // Implement me
+        Proc removed = nodeHead;
+        nodeHead = nodeHead.getNextNode();
 
-        return ""; // placeholder, modify this
+        return removed.getProcLabel();
     } // end of dequeue()
 
 
@@ -71,6 +72,20 @@ public class OrderedLinkedListRQ implements Runqueue {
     @Override
     public boolean removeProcess(String procLabel) {
         // Implement me
+        Proc currentNode = nodeHead;
+        Proc previousNode = null;
+
+        while (currentNode.getProcLabel() != procLabel) {
+            if (currentNode == null) {
+                return false;
+            } else {
+                currentNode = currentNode.getNextNode();
+                return true;
+            }
+        } // End while loop
+        if (currentNode == nodeHead) {
+            nodeHead = nodeHead.getNextNode();
+        }
 
         return false; // placeholder, modify this
     } // End of removeProcess()
@@ -94,7 +109,6 @@ public class OrderedLinkedListRQ implements Runqueue {
 
     @Override
     public void printAllProcesses(PrintWriter os) {
-        //Implement me
         Proc currentNode = nodeHead;
         StringBuilder list = new StringBuilder();
         while (currentNode != null) {
