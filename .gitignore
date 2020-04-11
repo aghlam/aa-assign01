@@ -1,0 +1,9 @@
+*.classpath
+*.project
+/BinarySearchTreeRQ.class
+/OrderedArrayRQ.class
+/OrderedLinkedListRQ.class
+/Proc.class
+/Runqueue.class
+/RunqueueTester.class
+*.class
