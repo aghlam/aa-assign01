@@ -87,19 +87,25 @@ public class OrderedLinkedListRQ implements Runqueue {
         Proc currentNode = nodeHead;
         Proc previousNode = null;
 
-        while (!currentNode.getProcLabel().equals(procLabel)) {
-            if (currentNode == null) {
+        // Find if node with procLable exists
+        while (currentNode == null || !currentNode.getProcLabel().equals(procLabel)) {
+            if (currentNode == null) { // Return false if it does not exist
                 return false;
             } else {
+                previousNode = currentNode;
                 currentNode = currentNode.getNextNode();
-                return true;
             }
-        } // End while loop
+        }
+        // Is the node the head node, set next node as head node
         if (currentNode == nodeHead) {
             nodeHead = nodeHead.getNextNode();
         }
+        // Set previous node's next node as current node's next node
+        else {
+            previousNode.setNextNode(currentNode.getNextNode());
+        }
+        return true;
 
-        return false; // placeholder, modify this
     } // End of removeProcess()
 
 
