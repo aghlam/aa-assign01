@@ -30,7 +30,6 @@ public class OrderedArrayRQ implements Runqueue {
     @Override
     public void enqueue(String procLabel, int vt) {
         //Checking if procArray is full or not
-    	//TODO: Sort enqueued process into array - For now the array is not sorted
     	if(back == 0)
     	{
     		procArray[back] = new Proc(procLabel, vt);
