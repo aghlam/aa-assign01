@@ -11,18 +11,43 @@ import java.lang.String;
  */
 public class OrderedLinkedListRQ implements Runqueue {
 
+    // To keep track the list size
+    private int listSize;
+    // Keep track if list is empty
+    private boolean isEmpty;
+    //
+    Proc nodeHead;
+
+
     /**
      * Constructs empty linked list
      */
     public OrderedLinkedListRQ() {
         // Implement me
+        this.listSize = 0;
+        this.nodeHead = null;
 
     }  // end of OrderedLinkedList()
 
 
     @Override
     public void enqueue(String procLabel, int vt) {
-        // Implement me
+
+        Proc newNode = new Proc(procLabel, vt, null);
+        Proc currentNode = nodeHead;
+        Proc previousNode = null;
+
+        while(currentNode != null && vt > currentNode.getVt()) {
+            previousNode = currentNode;
+            currentNode = currentNode.getNextNode();
+        }
+        if (previousNode == null) {
+            nodeHead = newNode;
+        } else {
+            previousNode.setNextNode(newNode);
+        }
+
+        newNode.setNextNode(currentNode);
 
     } // end of enqueue()
 
@@ -70,6 +95,13 @@ public class OrderedLinkedListRQ implements Runqueue {
     @Override
     public void printAllProcesses(PrintWriter os) {
         //Implement me
+        Proc currentNode = nodeHead;
+        StringBuilder list = new StringBuilder();
+        while (currentNode != null) {
+            list.append(currentNode.getProcLabel() + " ");
+            currentNode = currentNode.getNextNode();
+        }
+        System.out.println(list);
 
     } // end of printAllProcess()
 
