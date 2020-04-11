@@ -8,6 +8,7 @@ import java.lang.String;
  * You may add methods and attributes, but ensure your modified class compiles and runs.
  *
  * @author Sajal Halder, Minyi Li, Jeffrey Chan.
+ * @studentAuthor Alan Lam s3436174, Matthew Duong s3784450
  */
 public class OrderedLinkedListRQ implements Runqueue {
 
@@ -17,7 +18,7 @@ public class OrderedLinkedListRQ implements Runqueue {
      * Constructs empty linked list
      */
     public OrderedLinkedListRQ() {
-        // Implement me
+
         nodeHead = null;
 
     }  // end of OrderedLinkedList()
@@ -30,11 +31,7 @@ public class OrderedLinkedListRQ implements Runqueue {
         Proc currentNode = nodeHead;
         Proc previousNode = null;
 
-        /**
-         * If list is not empty, find first node bigger than vt and assign as current
-         * Set new node as previous node's next node
-         * Set new node's next node as current node
-         */
+        // If list is not empty, find first node bigger than vt and assign as current Node
         while (currentNode != null && vt >= currentNode.getVt()) {
             previousNode = currentNode;
             currentNode = currentNode.getNextNode();
@@ -43,9 +40,10 @@ public class OrderedLinkedListRQ implements Runqueue {
         if (previousNode == null) {
             nodeHead = newNode;
         } else {
+            // Set new node as previous node's next node
             previousNode.setNextNode(newNode);
         }
-
+        // Set new node's next node as current node
         newNode.setNextNode(currentNode);
 
     } // end of enqueue()
@@ -55,10 +53,16 @@ public class OrderedLinkedListRQ implements Runqueue {
     public String dequeue() {
         // Set node head as removed, and node head as next node
         Proc removed = nodeHead;
-        nodeHead = nodeHead.getNextNode();
 
+        if (removed == null) {
+            // If empty list, return empty string
+            return "";
+        } else {
+            nodeHead = nodeHead.getNextNode();
+        }
         // Print label of removed node
         return removed.getProcLabel();
+
     } // end of dequeue()
 
 
@@ -71,13 +75,13 @@ public class OrderedLinkedListRQ implements Runqueue {
         while (currentNode != null && !currentNode.getProcLabel().equals(procLabel)) {
             currentNode = currentNode.getNextNode();
         }
-
         // If node is not null and equal to procLabel return true
         if (currentNode != null && currentNode.getProcLabel().equals(procLabel)) {
             return true;
         }
+        // Return false if procLabel does not exist
+        return false;
 
-        return false; // placeholder, modify this
     } // end of findProcess()
 
 
@@ -104,6 +108,7 @@ public class OrderedLinkedListRQ implements Runqueue {
         else {
             previousNode.setNextNode(currentNode.getNextNode());
         }
+
         return true;
 
     } // End of removeProcess()
@@ -116,43 +121,67 @@ public class OrderedLinkedListRQ implements Runqueue {
         Proc currentNode = nodeHead;
         Proc previousNode = null;
 
-        // Iterate through list until until procLabel and add up all previous node's vt
-        // EXCEPT for last node's
-        while (!currentNode.getProcLabel().equals(procLabel)) {
+        // Iterate through list until until procLabel
+        // (Note: will not add last node's previous node value
+        while (currentNode == null || !currentNode.getProcLabel().equals(procLabel)) {
+            if (currentNode == null) {
+                // Returns -1 if node does not exist
+                return -1;
+            }
+            // Add all previous node's value
             if (previousNode != null) {
                 processTime += previousNode.getVt();
             }
             previousNode = currentNode;
             currentNode = currentNode.getNextNode();
         }
-
         // Add previous node's vt of current node
         if (previousNode != null) {
             processTime += previousNode.getVt();
         }
 
         return processTime;
+
     } // end of precedingProcessTime()
 
 
     @Override
     public int succeedingProcessTime(String procLabel) {
-        // Implement me
 
-        return -1; // placeholder, modify this
+        int processTime = 0;
+        Proc currentNode = nodeHead;
+
+        // Iterate through list until procLabel
+        while (currentNode == null || !currentNode.getProcLabel().equals(procLabel)) {
+            if (currentNode == null) {
+                // Return -1 if node does not exist
+                return -1;
+            } else {
+                currentNode = currentNode.getNextNode();
+            }
+        }
+
+        // While there exists a next node, add up all the following node's vt
+        while (currentNode.getNextNode() != null) {
+            processTime += currentNode.getNextNode().getVt();
+            currentNode = currentNode.getNextNode();
+        }
+
+        return processTime;
+
     } // end of precedingProcessTime()
 
 
     @Override
     public void printAllProcesses(PrintWriter os) {
         Proc currentNode = nodeHead;
-        StringBuilder list = new StringBuilder();
+        String list = "";
         while (currentNode != null) {
-            list.append(currentNode.getProcLabel() + " ");
+            list += (currentNode.getProcLabel() + " ");
             currentNode = currentNode.getNextNode();
         }
 
-        System.out.println(list);
+        os.println(list.trim());
 
     } // end of printAllProcess()
 
