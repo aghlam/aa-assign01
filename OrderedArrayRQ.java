@@ -1,9 +1,6 @@
 import java.io.PrintWriter;
 import java.lang.String;
 
-import com.sun.corba.se.impl.ior.NewObjectKeyTemplateBase;
-
-
 /**
  * Implementation of the Runqueue interface using an Ordered Array.
  *
@@ -11,6 +8,7 @@ import com.sun.corba.se.impl.ior.NewObjectKeyTemplateBase;
  * You may add methods and attributes, but ensure your modified class compiles and runs.
  *
  * @author Sajal Halder, Minyi Li, Jeffrey Chan
+ * @studentAuthor Matthew Duong s3784450, Alan Lam s3436174
  */
 public class OrderedArrayRQ implements Runqueue {
 	

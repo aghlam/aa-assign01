@@ -4,17 +4,20 @@ public class Proc {
     private int vt;
     private Proc nextNode;
 
+    // General Constructor
     public Proc(String procLabel, int vt) {
         this.procLabel = procLabel;
         this.vt = vt;
     }
 
+    // Constructor for OrderLinkedList
     public Proc(String procLabel, int vt, Proc nextNode) {
         this.procLabel = procLabel;
         this.vt = vt;
         this.nextNode = nextNode;
     }
 
+    // General getter and setter methods
     public String getProcLabel() {
         return procLabel;
     }
@@ -41,4 +44,5 @@ public class Proc {
     public void setNextNode(Proc nextNode) {
         this.nextNode = nextNode;
     }
+
 }
