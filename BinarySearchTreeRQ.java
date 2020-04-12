@@ -3,7 +3,7 @@ import java.lang.String;
 
 /**
  * Implementation of the Runqueue interface using a Binary Search Tree.
- *
+ * <p>
  * Your task is to complete the implementation of this class.
  * You may add methods and attributes, but ensure your modified class compiles and runs.
  *
@@ -12,6 +12,7 @@ import java.lang.String;
 public class BinarySearchTreeRQ implements Runqueue {
 
     Proc root;
+
     /**
      * Constructs empty queue
      */
@@ -25,17 +26,18 @@ public class BinarySearchTreeRQ implements Runqueue {
     @Override
     public void enqueue(String procLabel, int vt) {
         // Implement me
-        Proc newNode = new Proc(procLabel, vt, null, null);
         Proc currentNode = null;
         Proc parentNode = null;
         boolean search = true;
         // If tree is empty, assign newNode as root
         if (root == null) {
+            Proc newNode = new Proc(procLabel, vt, null, null, null);
             root = newNode;
         } else {
+
             currentNode = root;
 
-            while(search) {
+            while (search) {
                 parentNode = currentNode;
                 // Check if heading left (smaller than current vt) or right (bigger than current vt)
                 // Left path
@@ -43,6 +45,7 @@ public class BinarySearchTreeRQ implements Runqueue {
                     currentNode = currentNode.getLeftNode();
                     // Set left node as new node if empty
                     if (currentNode == null) {
+                        Proc newNode = new Proc(procLabel, vt, parentNode, null, null);
                         parentNode.setLeftNode(newNode);
                         search = false;
                     }
@@ -52,6 +55,7 @@ public class BinarySearchTreeRQ implements Runqueue {
                     currentNode = currentNode.getRightNode();
                     // Set right node as new node if empty
                     if (currentNode == null) {
+                        Proc newNode = new Proc(procLabel, vt, parentNode, null, null);
                         parentNode.setRightNode(newNode);
                         search = false;
                     }
@@ -67,22 +71,59 @@ public class BinarySearchTreeRQ implements Runqueue {
     public String dequeue() {
         // Implement me
 
-        return ""; // placeholder, modify this
+//        Proc currentNode = root;
+//        Proc removed = null;
+//        while (currentNode != null) {
+//            traverseNodes(currentNode.getLeftNode());
+//            traverseNodes(currentNode.getRightNode());
+//            removed = currentNode;
+//            break;
+//
+//        }
+//        return removed.getProcLabel();
+
+        Proc currentNode = root;
+        Proc removed;
+        Proc parentNode;
+
+//        if (root != null) {
+//            traverseNodes(node.getLeftNode());
+//            System.out.print(node.getProcLabel() + " ");
+//            traverseNodes(node.getRightNode());
+//        }
+
+        while (currentNode.getLeftNode() != null) {
+            currentNode = currentNode.getLeftNode();
+        }
+
+        if (currentNode.getRightNode() == null) {
+            removed = currentNode;
+            currentNode.getParentNode().setLeftNode(null);
+//            parentNode.setLeftNode(null);
+        } else {
+            parentNode = currentNode.getParentNode();
+            removed = currentNode;
+            parentNode.setLeftNode(currentNode.getRightNode());
+            currentNode.getRightNode().setParentNode(parentNode);
+        }
+
+        return removed.getProcLabel(); // placeholder, modify this
     } // end of dequeue()
 
 
     @Override
     public boolean findProcess(String procLabel) {
+        // Implement me
 
     	return findProcessRecursive(procLabel, root);
-    	
+
     } // end of findProcess()
-    
+
     public boolean findProcessRecursive(String procLabel, Proc node)
     {
     	Proc currentNode = node;
     	boolean result = false;
-    	
+
     	if(currentNode == null)
     	{
     		return false;
@@ -99,7 +140,7 @@ public class BinarySearchTreeRQ implements Runqueue {
     	{
     		result = findProcessRecursive(procLabel, currentNode.getRightNode());
     	}
-    	
+
     	return result;
     }
 
@@ -130,15 +171,12 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     @Override
     public void printAllProcesses(PrintWriter os) {
-        if(root == null)
-        {
-        	os.println("Error: No processes");
+        if (root == null) {
+            os.println("Error: No processes");
+        } else {
+            printProcessRec(root, os);
         }
-        else
-        {
-        	printProcessRec(root, os);
-        }
-        
+
         os.println();
     } // end of printAllProcess()
     
@@ -178,5 +216,20 @@ public class BinarySearchTreeRQ implements Runqueue {
     		return false;
     	}
     }
+
+//    @Override
+//    public void printAllProcesses(PrintWriter os) {
+//        traverseNodes(root);
+//    } // end of printAllProcess()
+//
+//    public void traverseNodes(Proc node) {
+//        if (node != null) {
+//            traverseNodes(node.getLeftNode());
+//            System.out.print(node.getProcLabel() + " ");
+//            traverseNodes(node.getRightNode());
+//        }
+//    }
+
+
 
 } // end of class BinarySearchTreeRQ
