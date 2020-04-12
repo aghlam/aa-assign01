@@ -7,6 +7,7 @@ public class Proc {
     private Proc nextNode;
     //BinarySearchTree variables
     private Proc leftNode, rightNode; // Child Nodes
+    private Proc parentNode;
 
     // General Constructor
     public Proc(String procLabel, int vt) {
@@ -22,11 +23,12 @@ public class Proc {
     }
 
     // Constructor for BinarySearchTree
-    public Proc(String procLabel, int vt, Proc leftNode, Proc rightNode) {
+    public Proc(String procLabel, int vt,Proc parentNode, Proc leftNode, Proc rightNode) {
         this.procLabel = procLabel;
         this.vt = vt;
         this.leftNode = leftNode;
         this.rightNode = rightNode;
+        this.parentNode = parentNode;
     }
 
     // General getter and setter methods
@@ -72,5 +74,13 @@ public class Proc {
 
     public void setRightNode(Proc rightNode) {
         this.rightNode = rightNode;
+    }
+
+    public Proc getParentNode() {
+        return parentNode;
+    }
+
+    public void setParentNode(Proc parentNode) {
+        this.parentNode = parentNode;
     }
 }
