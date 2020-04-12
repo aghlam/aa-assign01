@@ -288,27 +288,19 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     public Proc searchNodes(Proc node, String procLabel) {
 
-        Proc currentNode = null;
-        boolean found = false;
-
-        if (node == null) {
-            currentNode = null;
-            found = true;
-            return currentNode;
-        }
-        if (node.getProcLabel().equals(procLabel)) {
-            currentNode = node;
-            System.out.println("Im here: " + currentNode.getProcLabel());
-            return currentNode;
-        }
-        if (!node.getProcLabel().equals(procLabel) && currentNode != null) {
-            return currentNode = searchNodes(node.getLeftNode(), procLabel);
-        }
-        if (!node.getProcLabel().equals(procLabel) && currentNode != null) {
-
-            return currentNode = searchNodes(node.getRightNode(), procLabel);
-        }
-        return currentNode;
+    	if(node != null) {
+    		if(node.getProcLabel().equals(procLabel)) {
+    			return node;
+    		} else {
+    			Proc findingNode = searchNodes(node.getLeftNode(), procLabel);
+    			if(findingNode == null) {
+    				findingNode = searchNodes(node.getRightNode(), procLabel);
+    			}
+    			return findingNode;
+    		}
+    	} else {
+    		return null;
+    	}
     }
 
 
