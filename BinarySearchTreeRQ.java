@@ -108,7 +108,6 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     @Override
     public boolean findProcess(String procLabel) {
-        // Implement me
 
     	return findProcessRecursive(procLabel, root);
 
@@ -135,17 +134,167 @@ public class BinarySearchTreeRQ implements Runqueue {
     	{
     		result = findProcessRecursive(procLabel, currentNode.getRightNode());
     	}
-
+    	
     	return result;
     }
 
 
     @Override
     public boolean removeProcess(String procLabel) {
-        // Implement me
 
-        return false; // placeholder, modify this
+    	return removeProcessRecursive(procLabel, root);
+    		
     } // end of removeProcess()
+    
+    public boolean removeProcessRecursive(String procLabel, Proc node)
+    {
+    	Proc currentNode = node;
+    	boolean removed = false;
+
+    	if(currentNode == null)
+    	{
+    		return false;
+    	}
+    	if(currentNode.getProcLabel().equals(procLabel))
+    	{
+    		/* All the below if-statements check the various conditions the found node could be in:
+    		 * 1.Node has no child AND node is root
+    		 * 2.Node has a left child AND node is root
+    		 * 3.Node has right child AND node is root
+    		 * 4.Node has no children --> Further checks if the leaf is a right or left child of the parent node
+    		 * 5.Node has a left child --> Further checks if the node is a right or left child of the parent node
+    		 * 6.Node has a left child --> Further checks if the node is a right or left child of the parent node
+    		 * 7.Node has two children --> Has further checks if the node-to-swap has a right child or not before the swap occurs
+    		 */
+    		if(currentNode == root && (root.getLeftNode() == null && root.getRightNode() == null)) //1.Check if there is only one node I.E root
+    		{
+    			root = null;
+    			removed = true;
+    		}
+    		else if(currentNode == root && (root.getLeftNode() != null && root.getRightNode() == null)) //2.Check if root node has left child only
+    		{
+    			root = currentNode.getLeftNode();
+    			root.setParentNode(null);
+    			currentNode = null;
+    			removed = true;
+    		}
+    		else if(currentNode == root && (root.getLeftNode() == null && root.getRightNode() != null)) //3.Check if root node has right child only
+    		{
+    			root = currentNode.getRightNode();
+    			root.setParentNode(null);
+    			currentNode = null;
+    			removed = true;
+    		}
+    		else if(currentNode.getLeftNode() == null && currentNode.getRightNode() == null) //4.Check if node is leaf
+    		{
+    			if(currentNode.getVt() > currentNode.getParentNode().getVt()) //Check if this leaf is the right node of parent
+    			{
+    				currentNode.getParentNode().setRightNode(null);
+    				currentNode = null;
+    				removed = true;
+    			}
+    			else //This leaf is left node of parent
+    			{
+    				currentNode.getParentNode().setLeftNode(null);
+    				currentNode = null;
+    				removed = true;
+    			}
+    		}
+    		else if(currentNode.getLeftNode() != null && currentNode.getRightNode() == null) //5.Check if node has left child only
+    		{
+    			if(currentNode.getVt() > currentNode.getParentNode().getVt()) //Check if this node is the right node of parent
+    			{
+    				currentNode.getLeftNode().setParentNode(currentNode.getParentNode());
+    				currentNode.getParentNode().setRightNode(currentNode.getLeftNode());
+    				currentNode = null;
+    				removed = true;
+    			}
+    			else //This node is left node of parent
+    			{
+    				currentNode.getLeftNode().setParentNode(currentNode.getParentNode());
+    				currentNode.getParentNode().setLeftNode(currentNode.getLeftNode());
+    				currentNode = null;
+    				removed = true;
+    			}
+    		}
+    		else if(currentNode.getLeftNode() == null && currentNode.getRightNode() != null) //6.Check if node has right child only
+    		{
+    			if(currentNode.getVt() > currentNode.getParentNode().getVt()) //Check if this node is the right node of parent
+    			{
+    				currentNode.getRightNode().setParentNode(currentNode.getParentNode());
+    				currentNode.getParentNode().setRightNode(currentNode.getRightNode());
+    				currentNode = null;
+    				removed = true;
+    			}
+    			else //This node is left node of parent
+    			{
+    				currentNode.getRightNode().setParentNode(currentNode.getParentNode());
+    				currentNode.getParentNode().setLeftNode(currentNode.getRightNode());
+    				currentNode = null;
+    				removed = true;
+    			}
+    		}
+    		else //7.Node has 2 children - Only one way to do this even if node is the root node
+    		{
+    			boolean searched = false;
+    			Proc toSwap;
+    			Proc currentMovingNode = currentNode;
+    			while(!searched)
+    			{
+    				toSwap = currentMovingNode.getRightNode();
+    				if(toSwap.getLeftNode() != null) //Check if the next right node of currentMovingNode has a left node
+    				{
+    					toSwap = toSwap.getLeftNode();
+    					boolean leftSearched = false;
+    					while(!leftSearched)
+    					{
+    						if(toSwap.getLeftNode() != null)
+    						{
+    							toSwap = toSwap.getLeftNode();
+    						}
+    						else
+    						{
+    							leftSearched = true;
+    						}
+    					}
+    					if(toSwap.getRightNode() != null) //Node to swap has a right node
+    					{
+    						currentNode.setProcLabel(toSwap.getProcLabel());
+    						currentNode.setVt(toSwap.getVt());
+    						toSwap.getRightNode().setParentNode(toSwap.getParentNode());
+    						toSwap.getParentNode().setLeftNode(toSwap.getRightNode());
+    						toSwap = null;
+    					}
+    					else //Node to swap is a leaf
+    					{
+    						toSwap.getParentNode().setLeftNode(null);
+    						currentNode.setProcLabel(toSwap.getProcLabel());
+    						currentNode.setVt(toSwap.getVt());
+    						toSwap = null;
+
+    					}
+    					searched = true;
+    				}
+    				else
+    				{
+        				currentMovingNode = currentMovingNode.getRightNode();
+    				}
+    			}
+    			removed = true;
+    		}
+    		return removed;
+    	}
+    	if(currentNode.getLeftNode() != null && !removed)
+    	{
+    		removed = removeProcessRecursive(procLabel, currentNode.getLeftNode());
+    	}
+    	if(currentNode.getRightNode() != null && !removed)
+    	{
+    		removed = removeProcessRecursive(procLabel, currentNode.getRightNode());
+    	}
+    	
+    	return removed;
+    }
 
 
     @Override
