@@ -60,54 +60,49 @@ public class BinarySearchTreeRQ implements Runqueue {
                         search = false;
                     }
                 } // End right path
-            }
-
+            } // End while loop search
         }
-
     } // end of enqueue()
 
 
     @Override
     public String dequeue() {
-        // Implement me
-
-//        Proc currentNode = root;
-//        Proc removed = null;
-//        while (currentNode != null) {
-//            traverseNodes(currentNode.getLeftNode());
-//            traverseNodes(currentNode.getRightNode());
-//            removed = currentNode;
-//            break;
-//
-//        }
-//        return removed.getProcLabel();
 
         Proc currentNode = root;
         Proc removed;
         Proc parentNode;
 
-//        if (root != null) {
-//            traverseNodes(node.getLeftNode());
-//            System.out.print(node.getProcLabel() + " ");
-//            traverseNodes(node.getRightNode());
-//        }
-
-        while (currentNode.getLeftNode() != null) {
-            currentNode = currentNode.getLeftNode();
-        }
-
-        if (currentNode.getRightNode() == null) {
-            removed = currentNode;
-            currentNode.getParentNode().setLeftNode(null);
-//            parentNode.setLeftNode(null);
+        if (root == null) {
+            return "";
         } else {
-            parentNode = currentNode.getParentNode();
-            removed = currentNode;
-            parentNode.setLeftNode(currentNode.getRightNode());
-            currentNode.getRightNode().setParentNode(parentNode);
-        }
 
-        return removed.getProcLabel(); // placeholder, modify this
+            if (root.getLeftNode() == null && root.getRightNode() == null) {
+                removed = root;
+                root = null;
+                return removed.getProcLabel();
+            } else if (currentNode.getLeftNode() == null && currentNode.getRightNode() != null) {
+                removed = currentNode;
+                root = currentNode.getRightNode();
+                root.setParentNode(null);
+                return removed.getProcLabel();
+            } else {
+                while (currentNode.getLeftNode() != null) {
+                    currentNode = currentNode.getLeftNode();
+                }
+
+                if (currentNode.getRightNode() == null) {
+                    removed = currentNode;
+                    currentNode.getParentNode().setLeftNode(null);
+//            parentNode.setLeftNode(null);
+                } else {
+                    parentNode = currentNode.getParentNode();
+                    removed = currentNode;
+                    parentNode.setLeftNode(currentNode.getRightNode());
+                    currentNode.getRightNode().setParentNode(parentNode);
+                }
+                return removed.getProcLabel(); // placeholder, modify this
+            }
+        }
     } // end of dequeue()
 
 
