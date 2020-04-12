@@ -73,10 +73,35 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     @Override
     public boolean findProcess(String procLabel) {
-        // Implement me
 
-        return false; // placeholder, modify this
+    	return findProcessRecursive(procLabel, root);
+    	
     } // end of findProcess()
+    
+    public boolean findProcessRecursive(String procLabel, Proc node)
+    {
+    	Proc currentNode = node;
+    	boolean result = false;
+    	
+    	if(currentNode == null)
+    	{
+    		return false;
+    	}
+    	if(currentNode.getProcLabel().equals(procLabel))
+    	{
+    		return true;
+    	}
+    	if(currentNode.getLeftNode() != null && !result)
+    	{
+    		result = findProcessRecursive(procLabel, currentNode.getLeftNode());
+    	}
+    	if(currentNode.getRightNode() != null && !result)
+    	{
+    		result = findProcessRecursive(procLabel, currentNode.getRightNode());
+    	}
+    	
+    	return result;
+    }
 
 
     @Override
@@ -121,7 +146,7 @@ public class BinarySearchTreeRQ implements Runqueue {
     {
     	if(node != null)
     	{
-    		if(nodeIsFarthestRight(node))
+    		if(nodeIsFarthestRight(node) && node.getLeftNode() == null)
     		{
     			os.print(node.getProcLabel());
     		}
