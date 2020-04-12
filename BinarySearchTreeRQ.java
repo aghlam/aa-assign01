@@ -11,11 +11,13 @@ import java.lang.String;
  */
 public class BinarySearchTreeRQ implements Runqueue {
 
+    Proc root;
     /**
      * Constructs empty queue
      */
     public BinarySearchTreeRQ() {
         // Implement Me
+        root = null;
 
     }  // end of BinarySearchTreeRQ()
 
@@ -23,6 +25,40 @@ public class BinarySearchTreeRQ implements Runqueue {
     @Override
     public void enqueue(String procLabel, int vt) {
         // Implement me
+        Proc newNode = new Proc(procLabel, vt, null, null);
+        Proc currentNode = null;
+        Proc parentNode = null;
+        boolean search = true;
+        // If tree is empty, assign newNode as root
+        if (root == null) {
+            root = newNode;
+        } else {
+            currentNode = root;
+
+            while(search) {
+                parentNode = currentNode;
+                // Check if heading left (smaller than current vt) or right (bigger than current vt)
+                // Left path
+                if (vt < currentNode.getVt()) {
+                    currentNode = currentNode.getLeftNode();
+                    // Set left node as new node if empty
+                    if (currentNode == null) {
+                        parentNode.setLeftNode(newNode);
+                        search = false;
+                    }
+                } // End left path
+                // Right Path
+                else {
+                    currentNode = currentNode.getRightNode();
+                    // Set right node as new node if empty
+                    if (currentNode == null) {
+                        parentNode.setRightNode(newNode);
+                        search = false;
+                    }
+                } // End right path
+            }
+
+        }
 
     } // end of enqueue()
 

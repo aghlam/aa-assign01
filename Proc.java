@@ -1,8 +1,12 @@
 public class Proc {
 
+    // General Variables
     private String procLabel;
     private int vt;
+    // OrderedLinkedList variables
     private Proc nextNode;
+    //BinarySearchTree variables
+    private Proc leftNode, rightNode; // Child Nodes
 
     // General Constructor
     public Proc(String procLabel, int vt) {
@@ -15,6 +19,14 @@ public class Proc {
         this.procLabel = procLabel;
         this.vt = vt;
         this.nextNode = nextNode;
+    }
+
+    // Constructor for BinarySearchTree
+    public Proc(String procLabel, int vt, Proc leftNode, Proc rightNode) {
+        this.procLabel = procLabel;
+        this.vt = vt;
+        this.leftNode = leftNode;
+        this.rightNode = rightNode;
     }
 
     // General getter and setter methods
@@ -35,14 +47,30 @@ public class Proc {
     }
 
 
-    // Getter method for OrderLinkedList use
+    // Getter and setter methods for OrderLinkedList use
     public Proc getNextNode() {
         return nextNode;
     }
 
-    // Setter method for OrderLinkedList use
     public void setNextNode(Proc nextNode) {
         this.nextNode = nextNode;
     }
 
+
+    //Getter and setter methods for BinaryTreeSearch
+    public Proc getLeftNode() {
+        return leftNode;
+    }
+
+    public void setLeftNode(Proc leftNode) {
+        this.leftNode = leftNode;
+    }
+
+    public Proc getRightNode() {
+        return rightNode;
+    }
+
+    public void setRightNode(Proc rightNode) {
+        this.rightNode = rightNode;
+    }
 }
