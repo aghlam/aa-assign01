@@ -105,8 +105,53 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     @Override
     public void printAllProcesses(PrintWriter os) {
-        // Implement me
-
+        if(root == null)
+        {
+        	os.println("Error: No processes");
+        }
+        else
+        {
+        	printProcessRec(root, os);
+        }
+        
+        os.println();
     } // end of printAllProcess()
+    
+    public void printProcessRec(Proc node, PrintWriter os)
+    {
+    	if(node != null)
+    	{
+    		if(nodeIsFarthestRight(node))
+    		{
+    			os.print(node.getProcLabel());
+    		}
+    		else
+    		{
+        		printProcessRec(node.getLeftNode(), os);
+            	os.print(node.getProcLabel() + " ");
+            	printProcessRec(node.getRightNode(), os);
+    		}
+    	}
+    }
+    
+    public boolean nodeIsFarthestRight(Proc node)
+    {
+    	//Maybe it is easier to save this as a variable, and only update this when enqueuing/dequeuing
+    	//Hence we only need to check the variable instead of calling this method always
+    	Proc current = root;
+    	while(current.getRightNode() != null)
+    	{
+    		current = current.getRightNode();
+    	}
+    	
+    	if(node.getProcLabel().equals(current.getProcLabel()))
+    	{
+    		return true; //Node we're on IS the furthest right node
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
 
 } // end of class BinarySearchTreeRQ
