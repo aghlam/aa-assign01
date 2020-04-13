@@ -176,7 +176,7 @@ public class BinarySearchTreeRQ implements Runqueue {
                 removed = true;
             } else if (currentNode.getLeftNode() == null && currentNode.getRightNode() == null) //4.Check if node is leaf
             {
-                if (currentNode.getVt() > currentNode.getParentNode().getVt()) //Check if this leaf is the right node of parent
+                if (currentNode.getParentNode().getRightNode() == currentNode) //Check if this leaf is the right node of parent
                 {
                     currentNode.getParentNode().setRightNode(null);
                     currentNode = null;
@@ -189,7 +189,7 @@ public class BinarySearchTreeRQ implements Runqueue {
                 }
             } else if (currentNode.getLeftNode() != null && currentNode.getRightNode() == null) //5.Check if node has left child only
             {
-                if (currentNode.getVt() > currentNode.getParentNode().getVt()) //Check if this node is the right node of parent
+                if (currentNode.getParentNode().getRightNode() == currentNode) //Check if this node is the right node of parent
                 {
                     currentNode.getLeftNode().setParentNode(currentNode.getParentNode());
                     currentNode.getParentNode().setRightNode(currentNode.getLeftNode());
@@ -204,7 +204,7 @@ public class BinarySearchTreeRQ implements Runqueue {
                 }
             } else if (currentNode.getLeftNode() == null && currentNode.getRightNode() != null) //6.Check if node has right child only
             {
-                if (currentNode.getVt() > currentNode.getParentNode().getVt()) //Check if this node is the right node of parent
+                if (currentNode.getParentNode().getRightNode() == currentNode) //Check if this node is the right node of parent
                 {
                     currentNode.getRightNode().setParentNode(currentNode.getParentNode());
                     currentNode.getParentNode().setRightNode(currentNode.getRightNode());
