@@ -285,18 +285,27 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     } // end of precedingProcessTime()
 
-    public int addPreceddingTime(Proc node, Proc targetNode) {
+    public int addPreceddingTime(Proc node, Proc targetNode) 
+    {
         int time = 0;
-        if (node != null) {
+        if (node != null) 
+        {
             time += addPreceddingTime(node.getLeftNode(), targetNode);
-            if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() <= targetNode.getVt()) {
-                if(node != root && targetNode.getRightNode() != node) {
+            if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() <= targetNode.getVt()) 
+            {
+                if(node != root && targetNode.getRightNode() != node) 
+                {
                         time += node.getVt();
-                } else if (node.equals(root)) {
+                } 
+                else if (node.equals(root)) 
+                {
                         time += node.getVt();
                 }
             }
-            time += addPreceddingTime(node.getRightNode(), targetNode);
+            if(node != targetNode)
+            {
+            	time += addPreceddingTime(node.getRightNode(), targetNode);
+            }
         }
         return time;
     }
