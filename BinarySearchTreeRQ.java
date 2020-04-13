@@ -294,7 +294,7 @@ public class BinarySearchTreeRQ implements Runqueue {
                         time += node.getVt();
                 } else if (node.equals(root)) {
                         time += node.getVt();
-                    }
+                }
             }
             time += addPreceddingTime(node.getRightNode(), targetNode);
         }
@@ -339,7 +339,11 @@ public class BinarySearchTreeRQ implements Runqueue {
         if (node != null) {
             time += addSucceedingTime(node.getLeftNode(), targetNode);
             if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
-                time += node.getVt();
+                if(node != root && targetNode.getParentNode() != node) {
+                    time += node.getVt();
+                } else if (node.equals(root)) {
+                    time += node.getVt();
+                }
             }
             time += addSucceedingTime(node.getRightNode(), targetNode);
         }
