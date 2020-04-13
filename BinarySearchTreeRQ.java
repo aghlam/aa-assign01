@@ -412,25 +412,6 @@ public class BinarySearchTreeRQ implements Runqueue {
     }
 
 
-//    public int addSucceedingTime(Proc node, Proc targetNode) {
-//        int time = 0;
-//        if (node != null) {
-//            if (node != targetNode) {
-//                time += addSucceedingTime(node.getLeftNode(), targetNode);
-//            }
-//            if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
-//                if(node != root && targetNode.getParentNode() != node) {
-//                    time += node.getVt();
-//                } else if (node.equals(root)) {
-//                    time += node.getVt();
-//                }
-//            }
-//            time += addSucceedingTime(node.getRightNode(), targetNode);
-//        }
-//        return time;
-//    }
-
-
     @Override
     public void printAllProcesses(PrintWriter os) {
         if (root == null) {
@@ -470,20 +451,6 @@ public class BinarySearchTreeRQ implements Runqueue {
             return false;
         }
     }
-
-
-//    @Override
-//    public void printAllProcesses(PrintWriter os) {
-//        traverseNodes(root);
-//    } // end of printAllProcess()
-//
-//    public void traverseNodes(Proc node) {
-//        if (node != null) {
-//            traverseNodes(node.getLeftNode());
-//            System.out.print(node.getProcLabel() + " ");
-//            traverseNodes(node.getRightNode());
-//        }
-//    }
 
 
 } // end of class BinarySearchTreeRQ
