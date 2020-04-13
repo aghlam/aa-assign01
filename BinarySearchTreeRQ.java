@@ -345,21 +345,16 @@ public class BinarySearchTreeRQ implements Runqueue {
     } // end of precedingProcessTime()
 
 
-    public int addSucceedingTime(Proc node, Proc targetNode) 
-    {
+    public int addSucceedingTime(Proc node, Proc targetNode) {
         int time = 0;
 
-        if (node != null) 
-        {
+        if (node != null) {
             time += addSucceedingTime(node.getRightNode(), targetNode);
-            if (!isADistantParent(node, targetNode))
-            {
-                if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) 
-                {
+            if (!isADistantParent(node, targetNode)){
+                if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
                     time += node.getVt();
                 }
-                if (node != targetNode) 
-                {
+                if (node != targetNode) {
                     time += addSucceedingTime(node.getLeftNode(), targetNode);
                 }
             }
@@ -367,25 +362,20 @@ public class BinarySearchTreeRQ implements Runqueue {
         return time;
     }
     
-    public boolean isADistantParent(Proc node, Proc targetNode)
-    {
+    public boolean isADistantParent(Proc node, Proc targetNode) {
     	Proc currentNode = node;
     	boolean isDistantParent = false;
     	
-    	if(currentNode == null)
-    	{
+    	if(currentNode == null) {
     		return false;
     	}
-    	if(currentNode == targetNode)
-    	{
+    	if(currentNode == targetNode) {
     		return true;
     	}
-    	if(currentNode.getLeftNode() != null && !isDistantParent)
-    	{
+    	if(currentNode.getLeftNode() != null && !isDistantParent) {
     		isDistantParent = isADistantParent(currentNode.getLeftNode(), targetNode);
     	}
-    	if(currentNode.getRightNode() != null && !isDistantParent)
-    	{
+    	if(currentNode.getRightNode() != null && !isDistantParent) {
     		isDistantParent = isADistantParent(currentNode.getRightNode(), targetNode);
     	}
     	
