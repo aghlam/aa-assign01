@@ -8,6 +8,7 @@ import java.lang.String;
  * You may add methods and attributes, but ensure your modified class compiles and runs.
  *
  * @author Sajal Halder, Minyi Li, Jeffrey Chan
+ * @studentAuthor Matthew Duong s3784450, Alan Lam s3436174
  */
 public class BinarySearchTreeRQ implements Runqueue {
 
@@ -17,7 +18,7 @@ public class BinarySearchTreeRQ implements Runqueue {
      * Constructs empty queue
      */
     public BinarySearchTreeRQ() {
-        // Implement Me
+
         root = null;
 
     }  // end of BinarySearchTreeRQ()
@@ -25,7 +26,7 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     @Override
     public void enqueue(String procLabel, int vt) {
-        // Implement me
+
         Proc currentNode = null;
         Proc parentNode = null;
         boolean search = true;
@@ -36,7 +37,7 @@ public class BinarySearchTreeRQ implements Runqueue {
         } else {
 
             currentNode = root;
-
+            // Search for appropriate place to insert new node
             while (search) {
                 parentNode = currentNode;
                 // Check if heading left (smaller than current vt) or right (bigger than current vt)
@@ -50,12 +51,14 @@ public class BinarySearchTreeRQ implements Runqueue {
                         search = false;
                     }
                 } // End left path
+                // Checks parent node is the same as new node and if the right node is bigger than new node
+                // Inserts new node into between if right node is bigger, does not change ordering of processes
                 else if (vt == currentNode.getVt() && currentNode.getRightNode() != null && currentNode.getRightNode().getVt() != vt) {
-                    Proc tempNode = currentNode.getRightNode();
+                    Proc tempNode = currentNode.getRightNode(); // Set right node as temporary node
                     currentNode = currentNode.getRightNode();
                     Proc newNode = new Proc(procLabel, vt, parentNode, null, tempNode);
-                    parentNode.setRightNode(newNode);
-                    tempNode.setParentNode(newNode);
+                    parentNode.setRightNode(newNode); // Set right node as new node
+                    tempNode.setParentNode(newNode); // Relink temporary node as right node of new node
                     search = false;
                 }
                 // Right Path
@@ -79,36 +82,43 @@ public class BinarySearchTreeRQ implements Runqueue {
         Proc currentNode = root;
         Proc removed;
         Proc parentNode;
-
+        // Empty queue
         if (root == null) {
             return "";
         } else {
-
+            // Case 1 if the only node in the queue is the root
             if (root.getLeftNode() == null && root.getRightNode() == null) {
                 removed = root;
                 root = null;
                 return removed.getProcLabel();
-            } else if (currentNode.getLeftNode() == null && currentNode.getRightNode() != null) {
+            }
+            // If there are no nodes on the left side of the tree, remove root node from queue and
+            // set the next right node as root node
+            else if (currentNode.getLeftNode() == null && currentNode.getRightNode() != null) {
                 removed = currentNode;
                 root = currentNode.getRightNode();
                 root.setParentNode(null);
                 return removed.getProcLabel();
-            } else {
+            }
+            // Look for the left most node and remove it from the queue
+            else {
+                // Traversing to the left most node (smallest value)
                 while (currentNode.getLeftNode() != null) {
                     currentNode = currentNode.getLeftNode();
                 }
-
+                // If it does not have a right node, then remove it
                 if (currentNode.getRightNode() == null) {
                     removed = currentNode;
                     currentNode.getParentNode().setLeftNode(null);
-//            parentNode.setLeftNode(null);
-                } else {
+                }
+                // If it has a right node, remove left most node and set it's right node as new left most node
+                else {
                     parentNode = currentNode.getParentNode();
                     removed = currentNode;
-                    parentNode.setLeftNode(currentNode.getRightNode());
-                    currentNode.getRightNode().setParentNode(parentNode);
+                    parentNode.setLeftNode(currentNode.getRightNode()); // Set right node as left of parent node
+                    currentNode.getRightNode().setParentNode(parentNode); // Link new left node to parent node
                 }
-                return removed.getProcLabel(); // placeholder, modify this
+                return removed.getProcLabel();
             }
         }
     } // end of dequeue()
@@ -121,6 +131,8 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     } // end of findProcess()
 
+
+    // Pass in and use node variable to find node with procLabel using recursion
     public boolean findProcessRecursive(String procLabel, Proc node) {
         Proc currentNode = node;
         boolean result = false;
@@ -148,6 +160,7 @@ public class BinarySearchTreeRQ implements Runqueue {
         return removeProcessRecursive(procLabel, root);
 
     } // end of removeProcess()
+
 
     public boolean removeProcessRecursive(String procLabel, Proc node) {
         Proc currentNode = node;
@@ -280,30 +293,34 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     @Override
     public int precedingProcessTime(String procLabel) {
-
+        // Uses searchNodes method to find the node with corresponding procLabel
         Proc targetNode = searchNodes(root, procLabel);
         int time = 0;
-
+        // If node does not exist
         if (targetNode == null) {
             return -1;
-        } else {
+        } else { // Call addPrecedingTime method to add up vt's
             time += addPrecedingTime(root, targetNode);
         }
         return time;
 
     } // end of precedingProcessTime()
 
+
+    // Method to add up all time and processes less than given node
     public int addPrecedingTime(Proc node, Proc targetNode) {
+
         int time = 0;
+
         if (node != null) {
+            // Traverse through left nodes
             time += addPrecedingTime(node.getLeftNode(), targetNode);
+            // Check if nodes to add up are not equal to procLabel and vt's are equal or less
             if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() <= targetNode.getVt()) {
-//                if(node != root && targetNode.getRightNode() != node) {
-//                        time += node.getVt();
-//                } else if (node.equals(root)) {
                 time += node.getVt();
-//                }
             }
+            // Once traversing reaches target node, anything on the right hand side will have a
+            // larger vt than target node and hence will be ignored
             if (node != targetNode) {
                 time += addPrecedingTime(node.getRightNode(), targetNode);
             }
@@ -311,14 +328,18 @@ public class BinarySearchTreeRQ implements Runqueue {
         return time;
     }
 
+
+    // Method to search through nodes until one with matching procLabel is found using recursion
     public Proc searchNodes(Proc node, String procLabel) {
 
         if (node != null) {
             if (node.getProcLabel().equals(procLabel)) {
                 return node;
             } else {
+                // Recur through left nodes
                 Proc findingNode = searchNodes(node.getLeftNode(), procLabel);
                 if (findingNode == null) {
+                    // If not found, then recur through right nodes
                     findingNode = searchNodes(node.getRightNode(), procLabel);
                 }
                 return findingNode;
@@ -331,13 +352,13 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     @Override
     public int succeedingProcessTime(String procLabel) {
-
+        // Uses searchNodes method to find the node with corresponding procLabel
         Proc targetNode = searchNodes(root, procLabel);
         int time = 0;
-
+        // If node does not exist
         if (targetNode == null) {
             return -1;
-        } else {
+        } else { // Call method to add vt's after given node
             time += addSucceedingTime(root, targetNode);
         }
         return time;
@@ -350,7 +371,14 @@ public class BinarySearchTreeRQ implements Runqueue {
 
         if (node != null) {
             time += addSucceedingTime(node.getRightNode(), targetNode);
-            if (!isADistantParent(node, targetNode)){
+            if (!isADistantParent(node, targetNode)) {
+                if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
+                    time += node.getVt();
+                }
+                if (node != targetNode) {
+                    time += addSucceedingTime(node.getLeftNode(), targetNode);
+                }
+            } else if (isADistantParent(node, root.getLeftNode())) {
                 if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
                     time += node.getVt();
                 }
@@ -361,26 +389,28 @@ public class BinarySearchTreeRQ implements Runqueue {
         }
         return time;
     }
-    
+
+
     public boolean isADistantParent(Proc node, Proc targetNode) {
-    	Proc currentNode = node;
-    	boolean isDistantParent = false;
-    	
-    	if(currentNode == null) {
-    		return false;
-    	}
-    	if(currentNode == targetNode) {
-    		return true;
-    	}
-    	if(currentNode.getLeftNode() != null && !isDistantParent) {
-    		isDistantParent = isADistantParent(currentNode.getLeftNode(), targetNode);
-    	}
-    	if(currentNode.getRightNode() != null && !isDistantParent) {
-    		isDistantParent = isADistantParent(currentNode.getRightNode(), targetNode);
-    	}
-    	
-    	return isDistantParent;
+        Proc currentNode = node;
+        boolean isDistantParent = false;
+
+        if (currentNode == null) {
+            return false;
+        }
+        if (currentNode == targetNode) {
+            return true;
+        }
+        if (currentNode.getLeftNode() != null && !isDistantParent) {
+            isDistantParent = isADistantParent(currentNode.getLeftNode(), targetNode);
+        }
+        if (currentNode.getRightNode() != null && !isDistantParent) {
+            isDistantParent = isADistantParent(currentNode.getRightNode(), targetNode);
+        }
+
+        return isDistantParent;
     }
+
 
 //    public int addSucceedingTime(Proc node, Proc targetNode) {
 //        int time = 0;
@@ -412,6 +442,7 @@ public class BinarySearchTreeRQ implements Runqueue {
         os.println();
     } // end of printAllProcess()
 
+
     public void printProcessRec(Proc node, PrintWriter os) {
         if (node != null) {
             if (nodeIsFarthestRight(node) && node.getLeftNode() == null) {
@@ -423,6 +454,7 @@ public class BinarySearchTreeRQ implements Runqueue {
             }
         }
     }
+
 
     public boolean nodeIsFarthestRight(Proc node) {
         //Maybe it is easier to save this as a variable, and only update this when enqueuing/dequeuing
@@ -438,6 +470,7 @@ public class BinarySearchTreeRQ implements Runqueue {
             return false;
         }
     }
+
 
 //    @Override
 //    public void printAllProcesses(PrintWriter os) {
