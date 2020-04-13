@@ -50,6 +50,14 @@ public class BinarySearchTreeRQ implements Runqueue {
                         search = false;
                     }
                 } // End left path
+                else if (vt == currentNode.getVt() && currentNode.getRightNode() != null && currentNode.getRightNode().getVt() != vt) {
+                    Proc tempNode = currentNode.getRightNode();
+                    currentNode = currentNode.getRightNode();
+                    Proc newNode = new Proc(procLabel, vt, parentNode, null, tempNode);
+                    parentNode.setRightNode(newNode);
+                    tempNode.setParentNode(newNode);
+                    search = false;
+                }
                 // Right Path
                 else {
                     currentNode = currentNode.getRightNode();
@@ -279,25 +287,25 @@ public class BinarySearchTreeRQ implements Runqueue {
         if (targetNode == null) {
             return -1;
         } else {
-            time += addPreceddingTime(root, targetNode);
+            time += addPrecedingTime(root, targetNode);
         }
         return time;
 
     } // end of precedingProcessTime()
 
-    public int addPreceddingTime(Proc node, Proc targetNode) {
+    public int addPrecedingTime(Proc node, Proc targetNode) {
         int time = 0;
         if (node != null) {
-            time += addPreceddingTime(node.getLeftNode(), targetNode);
+            time += addPrecedingTime(node.getLeftNode(), targetNode);
             if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() <= targetNode.getVt()) {
-                if(node != root && targetNode.getRightNode() != node) {
-                        time += node.getVt();
-                } else if (node.equals(root)) {
-                        time += node.getVt();
-                }
+//                if(node != root && targetNode.getRightNode() != node) {
+//                        time += node.getVt();
+//                } else if (node.equals(root)) {
+                time += node.getVt();
+//                }
             }
-            if(node != targetNode) {
-            	time += addPreceddingTime(node.getRightNode(), targetNode);
+            if (node != targetNode) {
+                time += addPrecedingTime(node.getRightNode(), targetNode);
             }
         }
         return time;
@@ -336,21 +344,39 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     } // end of precedingProcessTime()
 
+
     public int addSucceedingTime(Proc node, Proc targetNode) {
         int time = 0;
+
         if (node != null) {
-            time += addSucceedingTime(node.getLeftNode(), targetNode);
-            if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
-                if(node != root && targetNode.getParentNode() != node) {
-                    time += node.getVt();
-                } else if (node.equals(root)) {
-                    time += node.getVt();
-                }
-            }
             time += addSucceedingTime(node.getRightNode(), targetNode);
+            if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
+                time += node.getVt();
+            }
+            if (node != targetNode) {
+                time += addSucceedingTime(node.getLeftNode(), targetNode);
+            }
         }
         return time;
     }
+
+//    public int addSucceedingTime(Proc node, Proc targetNode) {
+//        int time = 0;
+//        if (node != null) {
+//            if (node != targetNode) {
+//                time += addSucceedingTime(node.getLeftNode(), targetNode);
+//            }
+//            if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
+//                if(node != root && targetNode.getParentNode() != node) {
+//                    time += node.getVt();
+//                } else if (node.equals(root)) {
+//                    time += node.getVt();
+//                }
+//            }
+//            time += addSucceedingTime(node.getRightNode(), targetNode);
+//        }
+//        return time;
+//    }
 
 
     @Override
