@@ -272,44 +272,84 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     @Override
     public int precedingProcessTime(String procLabel) {
-        // Implement me
+
         Proc targetNode = searchNodes(root, procLabel);
-        System.out.println("targetNode: " + targetNode.getProcLabel());
-        int time;
+        int time = 0;
 
         if (targetNode == null) {
             return -1;
         } else {
-            return 100;
+            time += addPreceddingTime(root, targetNode);
         }
+        return time;
 
-//        return time; // placeholder, modify this
     } // end of precedingProcessTime()
+
+    public int addPreceddingTime(Proc node, Proc targetNode) {
+        int time = 0;
+        if (node != null) {
+            time += addPreceddingTime(node.getLeftNode(), targetNode);
+            if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() <= targetNode.getVt()) {
+                if(node != root && node.getParentNode().getVt()!=node.getVt()) {
+//                if(node.getLeftNode()!=null && node.getLeftNode().getVt()!=node.getVt()) {
+//                    if(node.getRightNode()!=null && node.getRightNode().getVt()!=node.getVt()) {
+
+                        time += node.getVt();
+//                    }
+
+                } else if (node.equals(root)) {
+                        time += node.getVt();
+                    }
+            }
+            time += addPreceddingTime(node.getRightNode(), targetNode);
+        }
+        return time;
+    }
 
     public Proc searchNodes(Proc node, String procLabel) {
 
-    	if(node != null) {
-    		if(node.getProcLabel().equals(procLabel)) {
-    			return node;
-    		} else {
-    			Proc findingNode = searchNodes(node.getLeftNode(), procLabel);
-    			if(findingNode == null) {
-    				findingNode = searchNodes(node.getRightNode(), procLabel);
-    			}
-    			return findingNode;
-    		}
-    	} else {
-    		return null;
-    	}
+        if (node != null) {
+            if (node.getProcLabel().equals(procLabel)) {
+                return node;
+            } else {
+                Proc findingNode = searchNodes(node.getLeftNode(), procLabel);
+                if (findingNode == null) {
+                    findingNode = searchNodes(node.getRightNode(), procLabel);
+                }
+                return findingNode;
+            }
+        } else {
+            return null;
+        }
     }
 
 
     @Override
     public int succeedingProcessTime(String procLabel) {
-        // Implement me
 
-        return -1; // placeholder, modify this
+        Proc targetNode = searchNodes(root, procLabel);
+        int time = 0;
+
+        if (targetNode == null) {
+            return -1;
+        } else {
+            time += addSucceedingTime(root, targetNode);
+        }
+        return time;
+
     } // end of precedingProcessTime()
+
+    public int addSucceedingTime(Proc node, Proc targetNode) {
+        int time = 0;
+        if (node != null) {
+            time += addSucceedingTime(node.getLeftNode(), targetNode);
+            if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
+                time += node.getVt();
+            }
+            time += addSucceedingTime(node.getRightNode(), targetNode);
+        }
+        return time;
+    }
 
 
     @Override
