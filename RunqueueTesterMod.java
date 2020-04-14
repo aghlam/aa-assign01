@@ -80,7 +80,16 @@ public class RunqueueTesterMod {
                                 System.err.println(lineNum + ": process run time must be non-negative.");
                             }
                             else {
+                                // Start time in nano
+                                long startTime = System.nanoTime();
+                                // Process
                                 queue.enqueue(tokens[1], vt);
+                                // End time in nano
+                                long endTime = System.nanoTime();
+                                // Total time converted to seconds
+                                double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                                // Print out
+                                System.out.println("Time taken to run process = " + nTime + "secs");
                             }
                         }
                         else {
@@ -91,8 +100,14 @@ public class RunqueueTesterMod {
                     // remove highest priority process from the queue
                     case "DE":
                         if (tokens.length == 1) {
+                            long startTime = System.nanoTime();
+
                             String procName = queue.dequeue();
+
+                            long endTime = System.nanoTime();
                             processOutWriter.println(procName);
+                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
                             System.err.println(lineNum + ": incorrect number of tokens.");
@@ -102,8 +117,12 @@ public class RunqueueTesterMod {
                     // find process
                     case "FP":
                         if (tokens.length == 2) {
+                            long startTime = System.nanoTime();
                             boolean status = queue.findProcess(tokens[1]);
+                            long endTime = System.nanoTime();
                             processOutWriter.println(status);
+                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
                             System.err.println(lineNum + ": incorrect number of tokens.");
@@ -113,8 +132,12 @@ public class RunqueueTesterMod {
                     // remove process from queue
                     case "RP":
                         if (tokens.length == 2) {
+                            long startTime = System.nanoTime();
                             boolean status = queue.removeProcess(tokens[1]);
+                            long endTime = System.nanoTime();
                             processOutWriter.println(status);
+                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
                             System.err.println(lineNum + ": incorrect number of tokens.");
@@ -124,8 +147,12 @@ public class RunqueueTesterMod {
                     // calculate preceding processes vt
                     case "PT":
                         if (tokens.length == 2) {
+                            long startTime = System.nanoTime();
                             int value = queue.precedingProcessTime(tokens[1]);
+                            long endTime = System.nanoTime();
                             processOutWriter.println(value);
+                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
                             System.err.println(lineNum + ": incorrect number of tokens.");
@@ -135,8 +162,12 @@ public class RunqueueTesterMod {
                     // calculate succeeding processes vt
                     case "ST":
                         if (tokens.length == 2) {
+                            long startTime = System.nanoTime();
                             int value = queue.succeedingProcessTime(tokens[1]);
+                            long endTime = System.nanoTime();
                             processOutWriter.println(value);
+                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
                             System.err.println(lineNum + ": incorrect number of tokens.");
@@ -145,7 +176,11 @@ public class RunqueueTesterMod {
                         break;
                     // print all processes
                     case "PA":
+                        long startTime = System.nanoTime();
                         queue.printAllProcesses(processOutWriter);
+                        long endTime = System.nanoTime();
+                        double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                        System.out.println("Time taken to run process = " + nTime + "secs");
                         break;
                     // quit
                     case "Q":
