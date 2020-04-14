@@ -365,12 +365,24 @@ public class BinarySearchTreeRQ implements Runqueue {
 
     } // end of precedingProcessTime()
 
-
+    // Method to add up all time and processes less than given node
     public int addSucceedingTime(Proc node, Proc targetNode) {
         int time = 0;
 
         if (node != null) {
+        	//Traverses to right nodes
             time += addSucceedingTime(node.getRightNode(), targetNode);
+            
+            /* Following if-statements has two checks for certain conditions:
+             * 1.If 'node' is NOT a distant parent of the targetNode (I.E The node will never eventually reach
+             * targetNode by going down the tree)
+             * 		->Applicable to nodes on the right side of the tree, as any nodes left of the BST will NEVER
+             * 		be a distant parent node.
+             * 		->Accounting for nodes on left side is the else-if condition, as explained in '2.'
+             * 2.If 'node' is on the left side of the BST (as given by root.getLeftNode() - Will ONLY be looking
+             * at left tree as cannot get to root node anyways)
+             * 		->Hence, can account for adding succeeding time for nodes on the left side of the BST
+             */
             if (!isADistantParent(node, targetNode)) {
                 if (!node.getProcLabel().equals(targetNode.getProcLabel()) && node.getVt() >= targetNode.getVt()) {
                     time += node.getVt();
@@ -390,7 +402,12 @@ public class BinarySearchTreeRQ implements Runqueue {
         return time;
     }
 
-
+    /* Checks if a given node 'node' will eventually reach 'targetNode' by going down the 
+     * tree, starting at 'node' (Akin to starting at root)
+     * Returns true if node eventually reached targetNode
+     * 		->Hence, node is a distant parent of targetNode (A.K.A Child nodes or further
+     * 		children of its child nodes will eventually be the targetNode)
+     */
     public boolean isADistantParent(Proc node, Proc targetNode) {
         Proc currentNode = node;
         boolean isDistantParent = false;
@@ -401,6 +418,8 @@ public class BinarySearchTreeRQ implements Runqueue {
         if (currentNode == targetNode) {
             return true;
         }
+        //Due to above if-statement, the below 2 if-statements won't run if targetNode has been found
+        //I.E We don't need to further search through the tree as we already found targetNode
         if (currentNode.getLeftNode() != null && !isDistantParent) {
             isDistantParent = isADistantParent(currentNode.getLeftNode(), targetNode);
         }
@@ -436,10 +455,9 @@ public class BinarySearchTreeRQ implements Runqueue {
         }
     }
 
-
+    //Checks if the given node is the same as the furthest right node
+    //Use in printing all nodes - Ensuring that there won't be an extra space outputted at the end
     public boolean nodeIsFarthestRight(Proc node) {
-        //Maybe it is easier to save this as a variable, and only update this when enqueuing/dequeuing
-        //Hence we only need to check the variable instead of calling this method always
         Proc current = root;
         while (current.getRightNode() != null) {
             current = current.getRightNode();
