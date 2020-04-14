@@ -87,7 +87,7 @@ public class RunqueueTesterMod {
                                 // End time in nano
                                 long endTime = System.nanoTime();
                                 // Total time converted to seconds
-                                double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                                double nTime = ((double)(endTime - startTime));
                                 // Print out
                                 System.out.println("Time taken to run process = " + nTime + "secs");
                             }
@@ -106,7 +106,7 @@ public class RunqueueTesterMod {
 
                             long endTime = System.nanoTime();
                             processOutWriter.println(procName);
-                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            double nTime = ((double)(endTime - startTime));
                             System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
@@ -121,7 +121,7 @@ public class RunqueueTesterMod {
                             boolean status = queue.findProcess(tokens[1]);
                             long endTime = System.nanoTime();
                             processOutWriter.println(status);
-                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            double nTime = ((double)(endTime - startTime));
                             System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
@@ -136,7 +136,7 @@ public class RunqueueTesterMod {
                             boolean status = queue.removeProcess(tokens[1]);
                             long endTime = System.nanoTime();
                             processOutWriter.println(status);
-                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            double nTime = ((double)(endTime - startTime));
                             System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
@@ -151,7 +151,7 @@ public class RunqueueTesterMod {
                             int value = queue.precedingProcessTime(tokens[1]);
                             long endTime = System.nanoTime();
                             processOutWriter.println(value);
-                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            double nTime = ((double)(endTime - startTime));
                             System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
@@ -166,7 +166,7 @@ public class RunqueueTesterMod {
                             int value = queue.succeedingProcessTime(tokens[1]);
                             long endTime = System.nanoTime();
                             processOutWriter.println(value);
-                            double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                            double nTime = ((double)(endTime - startTime));
                             System.out.println("Time taken to run process = " + nTime + "secs");
                         }
                         else {
@@ -179,7 +179,7 @@ public class RunqueueTesterMod {
                         long startTime = System.nanoTime();
                         queue.printAllProcesses(processOutWriter);
                         long endTime = System.nanoTime();
-                        double nTime = ((double)(endTime - startTime))/Math.pow(10, 9);
+                        double nTime = ((double)(endTime - startTime));
                         System.out.println("Time taken to run process = " + nTime + "secs");
                         break;
                     // quit
